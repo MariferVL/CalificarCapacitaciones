@@ -1,140 +1,148 @@
-
 import java.util.Scanner;
-
-
-
 
 public class App {
 
-    	//Calificar capacitación
-	//administrar los principales procesos que se llevan a cabo en ella día a día.
-	// capacitaciones son instancias para todos los clientes que posee 
-	//(generalmente a otras empresas).
-    //presentan diferentes asistentes,
-    //TODO:  obtener nombre asistentes y 
-     //TODO: obtener calificación que entrega a un determinado evento.
-	 //TODO: solicitar programa solicite  día, 
-     //TODO: solicitar hora, 
-     //TODO: solicitar lugar, 
-     //TODO: solicitar duración y 
-     //TODO: solicitar cantidad asistentes de una capacitación.
-     //TODO: crear  arreglo que tenga dicha cantidad de filas y dos columnas.
-     //TODO: primera columna el nombre asistente
-     //TODO: segunda columna  calificación  usuario entrega.
-     //TODO: almacene en la matriz la calificación como  String ==> nota entre 1 y 7,
-     //TODO: calificaciones solo pueden corresponder a valores enteros.
-     //TODO: ingresada la última calificación, debe mostrar por consola  datos de capacitación, 
-     //TODO: mostrar promedio de notas asignada, 
-     //TODO: mostrar calificación mayor y calificación menor.
-	//TODO: considere que el arreglo no almacenará las calificaciones de todas las capacitaciones, ya que los arreglos son estructuras volátiles
-	//TODO: se  permite uso de dos arreglos, 
-    //TODO: un arreglo de String para nombre y un arreglo de enteros para calificación. 
-	//TODO: ambos arreglos deben tener el mismo tamaño.
-    
-	static Scanner teclado = new Scanner(System.in);
-    
-	static String nombreEmpresa, fecha, hora, duracion;
-	static int cantidadAsistentes;
-	static String[][] datos;
-    static boolean cond = true;
+	public static void main(String[] args) {
+		// TODO: considere que arreglo no almacenará calificaciones de todas las
+		// capacitaciones, ya que los arreglos son estructuras volátiles
+		// TODO: se permite uso de dos tipos arreglos,
+		// TODO: un arreglo de String para nombre y un arreglo de enteros para
+		// calificación.
 
-	public static void datosCapacitacion() {
+		// Crear elemento tipo scanner para obtener inputs de usuario.
+		Scanner scanner = new Scanner(System.in);
 
-		System.out.println("Ingrese el nombre de la empresa: ");
-		nombreEmpresa = teclado.nextLine();
+		// Crear una var tipo boolean para control de bucles.
+		boolean cond = true;
 
-		System.out.println("Ingrese la fecha en la cual se realizará la capacitación: ");
-		fecha = teclado.nextLine();
+		// FIXME: les parece si en vez de nombre de  empresa pedimos el titulo de la capacitación?
+		// Obtener nombre de empresa.
+		String nombreEmpresa = detectarLetras("Ingrese nombre de empresa: ", scanner, cond);
 
-		System.out.println("Ingrese la hora de la capacitación");
-		hora = teclado.nextLine();
-        
-		System.out.println("Ingrese la duración de la capacitación (ejemplo: 2)");
-		duracion = teclado.nextLine();
-        
-		System.out.println("Ingrese la cantidad de asistentes");
-		cantidadAsistentes = teclado.nextInt();
-        
-		teclado.nextLine();
+		// Obtener fecha de capacitación.
+		String fecha = validacionFecha("Ingrese fecha de realización de capacitación (dd-mm-aa): ", scanner, cond);
+
+		// Obtener hora de capacitación.
+		String hora = validacionFecha("Ingrese hora de capacitación (Formato 24hrs): ", scanner, cond);
+
+		// Obtener duración de capacitación.
+		String duracion = detectarNumeros("Ingrese duración de capacitación (Ej: 2): ", scanner, cond);
+
+		// Obtener cantidad de asistentes a de capacitación.
+		String cantidadAsistentes = detectarNumeros("Ingrese cantidad de asistentes: ", scanner, cond);
+		System.out.println("asistentes: " + cantidadAsistentes);
+		// int totalAsistentes = Integer.parseInt(cantidadAsistentes);
+		int totalAsistentes = 2;
+
+		// Solicitar lugar de realización de capacitación,
+		String ubicacionCapacitacion = detectarLetras("Ingrese ubicación de capacitación: ", scanner, cond);
+
+		// Declaración de una matriz para la data de nombres y cantidad de asistentes.
+		String[][] datos = new String[2][totalAsistentes];
+
+		// Solicitar datos de asistentes dependiendo de su cantidad.
+		for (int i = 0; i < totalAsistentes; i++) {
+			// Obtener nombre de asistentes.
+			datos[0][i] = detectarLetras("Ingrese nombre de asistente: " + (i + 1) + ": ", scanner, cond);
+
+			// Obtener calificación de asistentes con sólo números enteros
+			// Almacenar en matriz calificación con nota de 1 a 7 en dato tipo String.
+			datos[1][i] = detectarRango(detectarNumeros(datos[0][i] + " ingrese su calificación (1-7): ",
+					scanner, cond), scanner, cond);
+		}
+
 		
-		datos = new String[cantidadAsistentes][2];
+
+		// TODO: ingresada la última calificación, debe mostrar por consola datos de capacitación,
+		// System.out.println("Fecha capacitación: " + fecha + " a las "+ hora);
+
+
+		// TODO: mostrar promedio de notas asignada,
+		System.out.println("Promedio de Calificaciones: " + obtenerPromedio(datos[1]));
+
+
+		// TODO: mostrar calificación mayor y calificación menor.
+
 
 	}
 
-    public static void validacionNombre() {
+	// Solicitar input de usuario y comprobar si contiene letras.
+	public static String detectarLetras(String mensaje, Scanner teclado, boolean cond) {
+		String entrada = "";
 
-        // Validación de nombre Empresa
-        
-        while(cond){
+		while (cond) {
+			System.out.print(mensaje);
+			entrada = teclado.nextLine();
 
-            if(nombreEmpresa.matches("[a-zA-Z]{1,}")){
+			if (entrada.matches("[a-zA-Z\\s]+${1,}")) {
+				cond = false;
+			} else {
+				System.out.println("Escriba sólo letras");
+			}
+		}
+		return entrada;
+	}
 
-                cond = false;
-            }
-            else{
-                System.out.println("Ingrese un nombre valido porfavor");
-            }
-        }
-    }
-
-    public static void validacionFecha() {
-
-        // Validación de fecha
-        /* Validacion de fecha */ 
-        while(cond){
-            
-            if (fecha.matches("[a-zA-Z 0-9]")){
-
-                cond = false;
-            }
-            else{
-                System.out.println("Ingrese una fecha valida porfavor");
-            }
-        }
-
-        // Ingreso y validación del campo HORA
+	// Solicitar input de usuario y comprobar si contiene números.
+	public static String detectarNumeros(String mensaje, Scanner teclado, boolean cond) {
+		String entrada = "";
 
 		while (cond) {
 
-			System.out.print("\n2.- Ingresa la hora (Ejemplo (20:30): ");
-			hora = teclado.nextLine();
+			System.out.print(mensaje);
+			entrada = teclado.nextLine();
 
-			if (hora.matches("^([01][0-9]|2[0-3]):[0-5][0-9]$")) {
+			if (entrada.matches("[0-9]+")) {
 				cond = false;
-			} 
-            else {
-				System.out.println("Ingrese un dato valido porfavor");
+			} else {
+				System.out.println("Escriba sólo números");
 			}
 		}
-    }
-
-
-	public static void ingresoNombreYnotas() {
-		 
-		for (int i = 0; i < cantidadAsistentes; i++) {
-            
-			System.out.print("Ingrese el nombre del asistente " + (i + 1) + ": ");
-            datos[i][0] = teclado.nextLine();
-            
-			System.out.print("Ingrese la calificación (1-7) del asistente " + (i + 1) + ": ");
-			datos[i][1] = teclado.nextLine();
-		}
-
+		return entrada;
 	}
-	
-	
-	 public static void impresionDatos() {
 
-	        for (int x = 0; x < cantidadAsistentes; x++) {
-                
-	            System.out.println("Nombre: " + datos[x][0] + "\nNota: " + datos[x][1]);
-	        }
-	    }
+	// Solicitar input de usuario y comprobar si contiene formato de fecha y hora.
+	public static String validacionFecha(String mensaje, Scanner teclado, boolean cond) {
+		String entrada = "";
 
-	public static void main(String[] args) {
-        
-		datosCapacitacion();
-		ingresoNombreYnotas();
-		impresionDatos();
+		while (cond) {
+			System.out.print(mensaje);
+			entrada = teclado.nextLine();
+			// FIXME: Validar Formato fecha
+			if (entrada.matches("^((0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])-(20|2[0-9])[0-9]{2})$")) {
+				cond = false;
+				// FIXME: Validar Formato fecha
+			} else if (entrada.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")) {
+				cond = false;
+			} else {
+				System.out.println("Ingrese dato válido, porfavor");
+			}
+		}
+		return entrada;
+	}
+
+	// Detectar si calificación está dentro del rango.
+	public static String detectarRango(String data, Scanner teclado, boolean cond) {
+		// FIXME: cambiar por condición que deseen
+		while (cond) {
+			if (Integer.parseInt(data) < 8 && Integer.parseInt(data) > 0) {
+				cond = false;
+			} else {
+				System.out.println("Por favor, ingrese una calificación entre 1(mala) y 7 (excelente)");
+				data = detectarNumeros(" Ingrese su calificación (1-7): ", teclado, cond);
+			}
+		}
+		return data;
+	}
+
+	// Calcular promedio.
+	public static int obtenerPromedio(String[] calificaciones) {
+		int promedio = 0;
+
+		//TODO: agregar calculo
+
+
+		return promedio;
+		
 	}
 }
